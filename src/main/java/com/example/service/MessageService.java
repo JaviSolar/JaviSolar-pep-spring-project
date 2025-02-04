@@ -19,7 +19,10 @@ public class MessageService {
     }
 
     public Message createMessage(Message message) {
-        return messageRepository.save(message);
+        if (message.getMessageText() != null && message.getMessageText().length() <= 255) {
+            return messageRepository.save(message);
+        }
+        return null;
     }
 
     

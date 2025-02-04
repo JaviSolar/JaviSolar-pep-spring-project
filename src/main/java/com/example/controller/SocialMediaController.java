@@ -1,5 +1,18 @@
 package com.example.controller;
 
+import javax.naming.AuthenticationException;
+
+import org.apache.catalina.connector.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.entity.Account;
+import com.example.entity.Message;
+import com.example.service.AccountService;
+import com.example.service.MessageService;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
@@ -7,6 +20,28 @@ package com.example.controller;
  * where applicable as well as the @ResponseBody and @PathVariable annotations. You should
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
+@RestController
 public class SocialMediaController {
+    AccountService accountService;
+    MessageService messageService;
 
+    @PostMapping("login")
+    public ResponseEntity<Account> login(@RequestBody Account account) throws AuthenticationException {
+        Account loginAcc = accountService.login(account.getUsername(), account.getPassword());
+        if (loginAcc != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).header("username", account.getUsername()).build();
+        } else {
+            return ResponseEntity.status(401).body(null);
+        }
+    }
+
+    @PostMapping("messages")
+    public ResponseEntity<Message> createMessage(@RequestBody Message message) {
+        Message createMsg = messageService.createMessage(message);
+        if (createMsg != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(createMsg);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createMsg);
+        }
+    }
 }
