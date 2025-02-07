@@ -25,11 +25,16 @@ public class SocialMediaController {
     AccountService accountService;
     MessageService messageService;
 
+    public SocialMediaController(AccountService accountService, MessageService messageService) {
+        this.accountService = accountService;
+        this.messageService = messageService;
+    }
+
     @PostMapping("login")
     public ResponseEntity<Account> login(@RequestBody Account account) throws AuthenticationException {
         Account loginAcc = accountService.login(account.getUsername(), account.getPassword());
         if (loginAcc != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).header("username", account.getUsername()).build();
+            return ResponseEntity.status(HttpStatus.OK).body(loginAcc);
         } else {
             return ResponseEntity.status(401).body(null);
         }
