@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
@@ -30,6 +31,16 @@ public class SocialMediaController {
         this.messageService = messageService;
     }
 
+    @PostMapping("register")
+    public ResponseEntity<Account> register(@RequestBody Account account) {
+        Account registerAcc = accountService.register(account);
+        if (registerAcc != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(registerAcc);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
     @PostMapping("login")
     public ResponseEntity<Account> login(@RequestBody Account account) throws AuthenticationException {
         Account loginAcc = accountService.login(account.getUsername(), account.getPassword());
@@ -44,7 +55,7 @@ public class SocialMediaController {
     public ResponseEntity<Message> createMessage(@RequestBody Message message) {
         Message createMsg = messageService.createMessage(message);
         if (createMsg != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(createMsg);
+            return ResponseEntity.status(HttpStatus.OK).body(createMsg);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createMsg);
         }
