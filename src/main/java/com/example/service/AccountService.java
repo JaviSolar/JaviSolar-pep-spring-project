@@ -18,7 +18,6 @@ import com.example.repository.AccountRepository;
 @Service
 public class AccountService {
     AccountRepository accountRepository;
-    private List<Account> accountList = new ArrayList<>();
 
     @Autowired
     public AccountService(AccountRepository accountRepository) {
