@@ -1,10 +1,14 @@
 package com.example.controller;
 
+import java.util.List;
+
 import javax.naming.AuthenticationException;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,6 +62,22 @@ public class SocialMediaController {
             return ResponseEntity.status(HttpStatus.OK).body(createMsg);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createMsg);
+        }
+    }
+
+    @GetMapping("messages")
+    public ResponseEntity<List<Message>> getAllMessages() {
+        List<Message> messages = messageService.getAllMessages();
+        return ResponseEntity.status(HttpStatus.OK).body(messages);
+    }
+
+    @GetMapping("messages/{messageId}")
+    public ResponseEntity<Message> getMessageById(@PathVariable("messageId") int id) {
+        Message message = messageService.getMessageById(id);
+        if (message != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
 }

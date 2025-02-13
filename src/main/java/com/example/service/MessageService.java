@@ -28,7 +28,11 @@ public class MessageService {
     }
 
     public List<Message> getAllMessages() {
-        
+        return messageRepository.findAll();
+    }
+
+    public Message getMessageById(int id) {
+        return messageRepository.findByMessageId(id);
     }
 
     
