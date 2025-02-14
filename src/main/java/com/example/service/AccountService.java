@@ -37,7 +37,6 @@ public class AccountService {
         return null;
     }
 
-    // Could add a custom exception for username not existing in database
     public Account login(String username, String password) throws AuthenticationException {
         Account account = accountRepository.findByUsername(username);
         if (account != null && account.getPassword().equals(password)) {

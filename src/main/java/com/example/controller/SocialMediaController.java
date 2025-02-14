@@ -7,7 +7,9 @@ import javax.naming.AuthenticationException;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,5 +81,31 @@ public class SocialMediaController {
         } else {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+    }
+
+    @DeleteMapping("messages/{messageId}")
+    public ResponseEntity<Integer> deleteMessageById(@PathVariable("messageId") int id) {
+        boolean msgExist = messageService.deleteMessageById(id);
+        if (msgExist) {
+            return ResponseEntity.status(HttpStatus.OK).body(1);
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
+
+    @PatchMapping("messages/{messageId}")
+    public ResponseEntity<Integer> updateMessageTextById(@RequestBody Message newMsgTxt, @PathVariable("messageId") int id) {
+        boolean msgExist = messageService.updateMessageTextById(newMsgTxt, id);
+        if (msgExist) {
+            return ResponseEntity.status(HttpStatus.OK).body(1);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @GetMapping("accounts/{accountId}/messages")
+    public ResponseEntity<List<Message>> getAllMessagesByUser(@PathVariable("accountId") int id) {
+        List<Message> messages = messageService.getAllMessagesByUser(id);
+        return ResponseEntity.status(HttpStatus.OK).body(messages);
     }
 }
